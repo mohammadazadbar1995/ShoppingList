@@ -2,11 +2,9 @@ package com.androiddevs.shoppinglisttestingyt.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.androiddevs.shoppinglisttestingyt.MainCoroutineRule
-import com.androiddevs.shoppinglisttestingyt.data.local.ShoppingItem
 import com.androiddevs.shoppinglisttestingyt.getOrAwaitValueTest
 import com.androiddevs.shoppinglisttestingyt.other.Constants
 import com.androiddevs.shoppinglisttestingyt.other.Status
-import com.androiddevs.shoppinglisttestingyt.repositories.DefaultShoppingRepository
 import com.androiddevs.shoppinglisttestingyt.repositories.FakeShoppingRepository
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,6 +15,7 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class ShoppingViewModelTest {
 
+
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
@@ -26,7 +25,7 @@ class ShoppingViewModelTest {
     private lateinit var viewModel: ShoppingViewModel
 
     @Before
-    fun setup() {
+    fun setUp() {
         viewModel = ShoppingViewModel(FakeShoppingRepository())
     }
 
@@ -42,7 +41,7 @@ class ShoppingViewModelTest {
     @Test
     fun `insert shopping item with too long name, returns error`() {
         val string = buildString {
-            for(i in 1..Constants.MAX_NAME_LENGTH + 1) {
+            for (i in 1..Constants.MAX_NAME_LENGTH + 1) {
                 append(1)
             }
         }
@@ -56,7 +55,7 @@ class ShoppingViewModelTest {
     @Test
     fun `insert shopping item with too long price, returns error`() {
         val string = buildString {
-            for(i in 1..Constants.MAX_PRICE_LENGTH + 1) {
+            for (i in 1..Constants.MAX_PRICE_LENGTH + 1) {
                 append(1)
             }
         }
@@ -69,7 +68,8 @@ class ShoppingViewModelTest {
 
     @Test
     fun `insert shopping item with too high amount, returns error`() {
-        viewModel.insertShoppingItem("name", "9999999999999999999", "3.0")
+
+        viewModel.insertShoppingItem("name", "9999999999999999999999", "3.0")
 
         val value = viewModel.insertShoppingItemStatus.getOrAwaitValueTest()
 
@@ -78,11 +78,11 @@ class ShoppingViewModelTest {
 
     @Test
     fun `insert shopping item with valid input, returns success`() {
-        viewModel.insertShoppingItem("name", "5", "3.0")
+        viewModel.insertShoppingItem("name", "9999999999999999999999", "3.0")
 
         val value = viewModel.insertShoppingItemStatus.getOrAwaitValueTest()
 
-        assertThat(value.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+        assertThat(value.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 }
 
